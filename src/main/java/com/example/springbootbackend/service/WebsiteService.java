@@ -13,23 +13,19 @@ public class WebsiteService {
     @Autowired
     private WebsiteRepository websiteRepository;
 
-
     public List<Website> findAll() {
         return websiteRepository.findAll();
     }
 
-
-    public Website save(Website employee) {
-        return websiteRepository.save(employee);
+    public Website save(Website website) {
+        return websiteRepository.save(website);
     }
-
 
     public <T> Optional<Website> findById(Long id) {
         return websiteRepository.findById(id);
     }
 
-
-    public void delete(Website employee) {
-        websiteRepository.delete(employee);
+    public void delete(Website website) {
+        websiteRepository.delete(website);
     }
 }

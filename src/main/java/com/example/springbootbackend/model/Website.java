@@ -1,14 +1,17 @@
 package com.example.springbootbackend.model;
 
+import javax.annotation.Generated;
 import javax.persistence.*;
 
 @Entity
 @Table(name="website")
+
 public class Website {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(name="name")
     private String name;
 
     @Column(name="url")
@@ -51,5 +54,15 @@ public class Website {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    @Override
+    public String toString() {
+        return "Website{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", url='" + url + '\'' +
+                ", active=" + active +
+                '}';
     }
 }
