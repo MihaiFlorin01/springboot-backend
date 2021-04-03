@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin (origins = "*")
@@ -34,6 +35,16 @@ public class WebsiteController {
     //create website rest api
     @PostMapping("/websites")
     public Website create(@RequestBody Website website){
+        Optional<Website> website2 = websiteService.findByUrl(website.getUrl());
+        if (website2.isPresent()) {
+            if (website.getUrl().equals(website2.get().getUrl())) {
+                website2.get().setName(website.getName());
+                website2.get().setUrl(website.getUrl());
+                website2.get().setActive(website.isActive());
+                pushWebsiteStatus(restTemplate, website2.get());
+                return websiteService.save(website2.get());
+            }
+        }
         Website website1 = websiteService.save(website);
 //        System.out.println(clone.toString());
         pushWebsiteStatus(restTemplate, website1);

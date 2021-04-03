@@ -1,7 +1,7 @@
 package com.example.springbootbackend.model;
 
-import javax.annotation.Generated;
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name="website")
@@ -64,5 +64,18 @@ public class Website {
                 ", url='" + url + '\'' +
                 ", active=" + active +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Website website = (Website) o;
+        return url.equals(website.url);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(url);
     }
 }
