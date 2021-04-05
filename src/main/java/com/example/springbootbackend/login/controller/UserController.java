@@ -1,10 +1,12 @@
 package com.example.springbootbackend.login.controller;
 
-import com.example.springbootbackend.login.status.LoginStatus;
 import com.example.springbootbackend.login.model.User;
 import com.example.springbootbackend.login.repository.UserRepository;
+import com.example.springbootbackend.login.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
@@ -12,11 +14,12 @@ import java.util.List;
 @RequestMapping("/api/v1")
 public class UserController {
 
-    @Autowired
-    UserRepository userService;
+    @Resource
+    UserService userService;
 
-    @GetMapping("/users")
+    @GetMapping("/login/users")
     public List<User> getUsers() {
+        System.out.println(userService.findAll().toString());
         return userService.findAll();
     }
 
@@ -35,14 +38,11 @@ public class UserController {
 //        return LoginStatus.SUCCESS;
 //    }
 
-    @GetMapping("/login")
-    public LoginStatus loginUser() {
+    @PostMapping("/login")
+    public boolean loginUser(@RequestBody User user) {
         User userDB = getUsers().get(0);
 //        System.out.println(getUsers().get(0).toString());
-        if (userDB.getUsername().equals("username") && userDB.getPassword().equals("password")) {
-            return LoginStatus.SUCCESS;
-        }
-        return LoginStatus.FAILURE;
+        return userDB.getUsername().equals(user.getUsername()) && userDB.getPassword().equals(user.getPassword());
     }
 
 //    @PostMapping("/logout")
