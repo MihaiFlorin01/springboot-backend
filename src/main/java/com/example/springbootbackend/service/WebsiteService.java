@@ -4,15 +4,13 @@ import com.example.springbootbackend.model.Website;
 import com.example.springbootbackend.repository.WebsiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class WebsiteService {
 
-    @Resource
+    @Autowired
     private WebsiteRepository websiteRepository;
 
     public List<Website> findAll() {

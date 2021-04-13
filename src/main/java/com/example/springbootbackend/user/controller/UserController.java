@@ -1,10 +1,9 @@
-package com.example.springbootbackend.register.controller;
+package com.example.springbootbackend.user.controller;
 
-import com.example.springbootbackend.register.model.User;
-import com.example.springbootbackend.register.service.UserService;
+import com.example.springbootbackend.user.model.User;
+import com.example.springbootbackend.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Optional;
 
 @RestController
@@ -20,15 +19,18 @@ public class UserController {
         Optional<User> user2 = userService.findByEmail(user.getEmail());
         if (user2.isPresent()) {
             if (user.getEmail().equals(user2.get().getEmail())) {
-                user2.get().setFirstName(user.getFirstName());
-                user2.get().setLastName(user.getLastName());
+                user2.get().setUsername(user.getUsername());
                 user2.get().setEmail(user.getEmail());
                 user2.get().setPassword(user.getPassword());
                 return userService.save(user2.get());
             }
         }
         return userService.save(user);
+    }
 
+    @PostMapping("/login")
+    public boolean userLogin(@RequestBody User user) {
+        return userService.existsByUsernameAndPassword(user.getUsername(), user.getPassword());
     }
 
 }

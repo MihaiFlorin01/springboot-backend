@@ -1,4 +1,4 @@
-package com.example.springbootbackend.configuration;
+package com.example.springbootbackend.user.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -7,9 +7,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
+
 @Configuration
 @EnableWebSecurity
-public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -22,8 +23,10 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 antMatchers(HttpMethod.GET, "/api/v1/websites/{id}").permitAll().
                 antMatchers(HttpMethod.PUT, "/api/v1/websites/{id}").permitAll().
                 antMatchers(HttpMethod.DELETE, "/api/v1//websites/delete/{id}").permitAll().
-                antMatchers(HttpMethod.POST, "/api/v1/register").permitAll()
-                .anyRequest().authenticated();
+                antMatchers(HttpMethod.POST, "/api/v1/register").permitAll().
+                antMatchers(HttpMethod.POST, "/api/v1/login").permitAll()
+                .anyRequest().authenticated().and().rememberMe().key("key").tokenValiditySeconds(60 * 60 * 24);
+
     }
 
 }

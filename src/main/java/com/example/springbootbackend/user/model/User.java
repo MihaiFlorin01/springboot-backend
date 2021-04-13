@@ -1,20 +1,21 @@
-package com.example.springbootbackend.register.model;
+package com.example.springbootbackend.user.model;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user")
+@Table(	name = "user",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "username"),
+                @UniqueConstraint(columnNames = "email")
+        })
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name="first_name")
-    private String firstName;
-
-    @Column(name="last_name")
-    private String lastName;
+    @Column(name="username")
+    private String username;
 
     @Column(name="email")
     private String email;
@@ -25,35 +26,26 @@ public class User {
     public User() {
     }
 
-    public User(String firstName, String lastName, String email, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public User(String username, String email, String password) {
+        this.username = username;
         this.email = email;
         this.password = password;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
