@@ -25,7 +25,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 antMatchers(HttpMethod.DELETE, "/api/v1//websites/delete/{id}").permitAll().
                 antMatchers(HttpMethod.POST, "/api/v1/register").permitAll().
                 antMatchers(HttpMethod.POST, "/api/v1/login").permitAll()
-                .anyRequest().authenticated().and().rememberMe().key("key").tokenValiditySeconds(60 * 60 * 24);
+                .anyRequest().authenticated();
 
     }
 

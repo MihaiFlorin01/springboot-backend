@@ -21,19 +21,15 @@ public class WebsiteController {
 
     private RestTemplate restTemplate = new RestTemplate();
 
-    //private static final String URL_BACKEND = "http://localhost:8082/";
-
     private void pushWebsiteStatus(RestTemplate restTemplate, Website website) {
         restTemplate.postForObject(website.getUrl() + "/create/clone", website, Website.class);
     }
 
-    //get all websites
     @GetMapping("/websites")
     public List<Website> getAll() {
         return websiteService.findAll();
     }
 
-    //create website rest api
     @PostMapping("/websites")
     public Website create(@RequestBody Website website){
         Optional<Website> website2 = websiteService.findByUrl(website.getUrl());
@@ -47,20 +43,16 @@ public class WebsiteController {
             }
         }
         Website website1 = websiteService.save(website);
-//        System.out.println(clone.toString());
         pushWebsiteStatus(restTemplate, website1);
-//        System.out.println(status);
         return website1;
     }
 
-    //get website by id rest api
     @GetMapping("/websites/{id}")
     public ResponseEntity<Website> getWebsiteById(@PathVariable  Long id) throws Throwable {
         Website website = websiteService.findById(id).orElseThrow(() -> new ResourceNotFoundException("website not exist with id: " + id));
         return ResponseEntity.ok(website);
     }
 
-    //update website rest api
     @PutMapping("/websites/{id}")
     public ResponseEntity<Website> update(@PathVariable Long id, @RequestBody Website websiteDetails) {
         Website website = websiteService.findById(id).orElseThrow(() -> new ResourceNotFoundException("website not exist with id: " + id));
@@ -74,7 +66,6 @@ public class WebsiteController {
         return ResponseEntity.ok(updateWebsite);
     }
 
-    //delete website rest api
     @DeleteMapping("/websites/delete/{id}")
     public ResponseEntity<Map<String, Boolean>> delete(@PathVariable  Long id) {
         Website website = websiteService.findById(id).orElseThrow(() -> new ResourceNotFoundException("website not exist with id: " + id));
