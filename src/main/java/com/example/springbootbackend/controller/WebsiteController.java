@@ -1,6 +1,7 @@
 package com.example.springbootbackend.controller;
 
 import com.example.springbootbackend.exception.ResourceNotFoundException;
+import com.example.springbootbackend.mail.EmailService;
 import com.example.springbootbackend.model.Website;
 import com.example.springbootbackend.service.WebsiteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class WebsiteController {
     private WebsiteService websiteService;
 
     private RestTemplate restTemplate = new RestTemplate();
+
+    @Autowired
+    private EmailService emailService;
 
     private void pushWebsiteStatus(RestTemplate restTemplate, Website website) {
         restTemplate.postForObject(website.getUrl() + "/create/clone", website, Website.class);
@@ -53,8 +57,20 @@ public class WebsiteController {
             int period = Integer.parseInt(website1.getPeriod());
             ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
             scheduledExecutorService.schedule(() -> pushWebsiteStatus(restTemplate, website1), period, TimeUnit.SECONDS);
+            if (website1.isActive()) {
+                emailService.sendMail("mihaiflorin0119498@gmail.com", "Activare Website", website1.getName() + " a fost creat si va fi activat dupa " + website1.getPeriod() + " secunde!");
+            }
+            else {
+                emailService.sendMail("mihaiflorin0119498@gmail.com", "Dezactivare Website",  website1.getName() + " a fost creat si va fi dezactivat dupa " + website1.getPeriod() + " secunde!");
+            }
         }
         else {
+            if (website1.isActive()) {
+                emailService.sendMail("mihaiflorin0119498@gmail.com", "Activare Website", website1.getName() + " a fost creat cu status-ul activat!");
+            }
+            else {
+                emailService.sendMail("mihaiflorin0119498@gmail.com", "Dezactivare Website",  website1.getName() + " a fost creat cu status-ul dezactivat!");
+            }
             pushWebsiteStatus(restTemplate, website1);
         }
         //pushWebsiteStatus(restTemplate, website1);
@@ -81,8 +97,20 @@ public class WebsiteController {
             int period = Integer.parseInt(website.getPeriod());
             ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
             scheduledExecutorService.schedule(() -> pushWebsiteStatus(restTemplate, updateWebsite), period, TimeUnit.SECONDS);
+            if (website.isActive()) {
+                emailService.sendMail("mihaiflorin0119498@gmail.com", "Activare Website", website.getName() + " va fi activat dupa " + website.getPeriod() + " secunde!");
+            }
+            else {
+                emailService.sendMail("mihaiflorin0119498@gmail.com", "Dezactivare Website",  website.getName() + " va fi dezactivat dupa " + website.getPeriod() + " secunde!");
+            }
         }
         else {
+            if (website.isActive()) {
+                emailService.sendMail("mihaiflorin0119498@gmail.com", "Activare Website", website.getName() + " a fost activat!");
+            }
+            else {
+                emailService.sendMail("mihaiflorin0119498@gmail.com", "Dezactivare Website",  website.getName() + " a fost dezactivat!");
+            }
             pushWebsiteStatus(restTemplate, updateWebsite);
         }
         return ResponseEntity.ok(updateWebsite);
