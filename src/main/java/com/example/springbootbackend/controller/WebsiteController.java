@@ -5,12 +5,16 @@ import com.example.springbootbackend.model.Website;
 import com.example.springbootbackend.service.WebsiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @CrossOrigin (origins = "*")
@@ -42,13 +46,23 @@ public class WebsiteController {
                 return websiteService.save(website2.get());
             }
         }
+
         Website website1 = websiteService.save(website);
-        pushWebsiteStatus(restTemplate, website1);
+
+        if (!StringUtils.isEmpty(website1.getPeriod()) && !website1.getPeriod().equals("none")) {
+            int period = Integer.parseInt(website1.getPeriod());
+            ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+            scheduledExecutorService.schedule(() -> pushWebsiteStatus(restTemplate, website1), period, TimeUnit.SECONDS);
+        }
+        else {
+            pushWebsiteStatus(restTemplate, website1);
+        }
+        //pushWebsiteStatus(restTemplate, website1);
         return website1;
     }
 
     @GetMapping("/websites/{id}")
-    public ResponseEntity<Website> getWebsiteById(@PathVariable  Long id) throws Throwable {
+    public ResponseEntity<Website> getWebsiteById(@PathVariable  Long id) {
         Website website = websiteService.findById(id).orElseThrow(() -> new ResourceNotFoundException("website not exist with id: " + id));
         return ResponseEntity.ok(website);
     }
@@ -60,14 +74,22 @@ public class WebsiteController {
         website.setName(websiteDetails.getName());
         website.setActive(websiteDetails.isActive());
         website.setUrl(websiteDetails.getUrl());
+        website.setPeriod(websiteDetails.getPeriod());
 
         Website updateWebsite = websiteService.save(website);
-        pushWebsiteStatus(restTemplate, updateWebsite);
+        if (!StringUtils.isEmpty(website.getPeriod()) && !website.getPeriod().equals("none")) {
+            int period = Integer.parseInt(website.getPeriod());
+            ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+            scheduledExecutorService.schedule(() -> pushWebsiteStatus(restTemplate, updateWebsite), period, TimeUnit.SECONDS);
+        }
+        else {
+            pushWebsiteStatus(restTemplate, updateWebsite);
+        }
         return ResponseEntity.ok(updateWebsite);
     }
 
     @DeleteMapping("/websites/delete/{id}")
-    public ResponseEntity<Map<String, Boolean>> delete(@PathVariable  Long id) {
+    public ResponseEntity<Map<String, Boolean>> delete(@PathVariable Long id) {
         Website website = websiteService.findById(id).orElseThrow(() -> new ResourceNotFoundException("website not exist with id: " + id));
 
         websiteService.delete(website);

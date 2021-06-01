@@ -19,6 +19,8 @@ public class Website {
     @Column(name="active")
     private boolean active;
 
+    private String period;
+
     public Website() {
 
     }
@@ -53,6 +55,14 @@ public class Website {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public String getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(String period) {
+        this.period = period;
     }
 
     @Override
