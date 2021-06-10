@@ -19,7 +19,11 @@ public class Website {
     @Column(name="active")
     private boolean active;
 
+    @Column(name = "period")
     private String period;
+
+    @Column(name = "email")
+    private String email;
 
     public Website() {
 
@@ -65,6 +69,14 @@ public class Website {
         this.period = period;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public String toString() {
         return "Website{" +
@@ -72,6 +84,7 @@ public class Website {
                 ", name='" + name + '\'' +
                 ", url='" + url + '\'' +
                 ", active=" + active +
+                ", period='" + period + '\'' +
                 '}';
     }
 

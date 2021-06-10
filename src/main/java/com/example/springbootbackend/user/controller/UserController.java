@@ -4,6 +4,9 @@ import com.example.springbootbackend.user.model.User;
 import com.example.springbootbackend.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.jws.soap.SOAPBinding;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -31,6 +34,11 @@ public class UserController {
     @PostMapping("/login")
     public boolean userLogin(@RequestBody User user) {
         return userService.existsByUsernameAndPassword(user.getUsername(), user.getPassword());
+    }
+
+    @GetMapping("/email/{username}")
+    public Optional<User> findByUsername(@PathVariable String username) {
+        return userService.findByUsername(username);
     }
 
 }
