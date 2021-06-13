@@ -81,7 +81,6 @@ public class WebsiteController {
             }
             pushWebsiteStatus(restTemplate, website1);
         }
-        //pushWebsiteStatus(restTemplate, website1);
         return website1;
     }
 
