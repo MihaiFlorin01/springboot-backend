@@ -29,9 +29,6 @@ public class WebsiteController {
     @Autowired
     private EmailService emailService;
 
-    @Autowired
-    private UserService userService;
-
     private RestTemplate restTemplate = new RestTemplate();
 
     private void pushWebsiteStatus(RestTemplate restTemplate, Website website) {
