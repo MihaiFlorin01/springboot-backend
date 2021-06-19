@@ -4,7 +4,6 @@ import com.example.springbootbackend.exception.ResourceNotFoundException;
 import com.example.springbootbackend.mail.EmailService;
 import com.example.springbootbackend.model.Website;
 import com.example.springbootbackend.service.WebsiteService;
-import com.example.springbootbackend.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
